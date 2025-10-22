@@ -1,0 +1,145 @@
+import { Monitor, Palette, Info, HardDrive } from "lucide-react";
+import { Button } from "../ui/button";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Separator } from "../ui/separator";
+import { toast } from "sonner";
+
+export const Settings = () => {
+  const { theme, setTheme, accentColor, setAccentColor } = useTheme();
+
+  const accentColors = [
+    { name: "Purple", value: "purple", color: "hsl(250 100% 65%)" },
+    { name: "Blue", value: "blue", color: "hsl(217 91% 60%)" },
+    { name: "Green", value: "green", color: "hsl(142 76% 36%)" },
+    { name: "Orange", value: "orange", color: "hsl(25 95% 53%)" },
+    { name: "Pink", value: "pink", color: "hsl(330 81% 60%)" },
+  ];
+
+  const clearAllData = () => {
+    localStorage.clear();
+    toast.success("All data cleared! Reloading...");
+    setTimeout(() => window.location.reload(), 1000);
+  };
+
+  return (
+    <div className="h-full overflow-auto">
+      <div className="max-w-3xl mx-auto p-6 space-y-8">
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Settings</h1>
+          <p className="text-muted-foreground">Customize your NEO experience</p>
+        </div>
+
+        {/* Appearance Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Monitor className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Appearance</h2>
+          </div>
+          
+          <div className="bg-muted/30 rounded-lg p-6 space-y-6">
+            {/* Theme Selection */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Theme Mode</Label>
+              <RadioGroup value={theme} onValueChange={(value) => setTheme(value as "dark" | "light" | "system")}>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="light" id="light" />
+                  <Label htmlFor="light" className="cursor-pointer">Light</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="dark" id="dark" />
+                  <Label htmlFor="dark" className="cursor-pointer">Dark</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="system" id="system" />
+                  <Label htmlFor="system" className="cursor-pointer">System</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            <Separator />
+
+            {/* Accent Color Selection */}
+            <div className="space-y-3">
+              <Label className="text-base font-medium">Accent Color</Label>
+              <div className="grid grid-cols-5 gap-3">
+                {accentColors.map((color) => (
+                  <button
+                    key={color.value}
+                    onClick={() => {
+                      setAccentColor(color.value);
+                      toast.success(`Accent color changed to ${color.name}`);
+                    }}
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all hover:scale-105 ${
+                      accentColor === color.value
+                        ? "border-primary bg-primary/10"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <div
+                      className="w-10 h-10 rounded-full"
+                      style={{ backgroundColor: color.color }}
+                    />
+                    <span className="text-xs font-medium">{color.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Storage Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <HardDrive className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Storage</h2>
+          </div>
+          
+          <div className="bg-muted/30 rounded-lg p-6 space-y-4">
+            <div className="space-y-2">
+              <Label className="text-base font-medium">Local Storage</Label>
+              <p className="text-sm text-muted-foreground">
+                Clear all saved windows, settings, and app data
+              </p>
+            </div>
+            <Button
+              variant="destructive"
+              onClick={clearAllData}
+            >
+              Clear All Data
+            </Button>
+          </div>
+        </div>
+
+        {/* About Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Info className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">About NEO</h2>
+          </div>
+          
+          <div className="bg-muted/30 rounded-lg p-6 space-y-2">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Version</span>
+              <span className="font-medium">1.0.0</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Engine</span>
+              <span className="font-medium">React v18</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Build</span>
+              <span className="font-medium">2024.01</span>
+            </div>
+            <Separator className="my-4" />
+            <p className="text-sm text-center text-muted-foreground">
+              © 2024 NEO Operating System
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
