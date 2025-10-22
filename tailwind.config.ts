@@ -88,12 +88,39 @@ export default {
           "0%, 100%": { opacity: "0.5" },
           "50%": { opacity: "1" },
         },
+        "window-open": {
+          "0%": { 
+            opacity: "0",
+            transform: "scale(0.95) translateY(10px)"
+          },
+          "100%": { 
+            opacity: "1",
+            transform: "scale(1) translateY(0)"
+          },
+        },
+        "window-minimize": {
+          "0%": { 
+            opacity: "1",
+            transform: "scale(1)"
+          },
+          "100%": { 
+            opacity: "0",
+            transform: "scale(0.8) translateY(20px)"
+          },
+        },
+        "icon-bounce": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.1)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "float": "float 6s ease-in-out infinite",
         "glow": "glow 2s ease-in-out infinite",
+        "window-open": "window-open 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+        "window-minimize": "window-minimize 0.15s cubic-bezier(0.4, 0, 1, 1)",
+        "icon-bounce": "icon-bounce 0.3s ease-in-out",
       },
       backdropBlur: {
         xs: '2px',
