@@ -17,13 +17,13 @@ export const Browser = () => {
     { 
       id: "1", 
       title: "New Tab", 
-      url: "https://www.google.com",
-      history: ["https://www.google.com"],
+      url: "https://www.bing.com",
+      history: ["https://www.bing.com"],
       historyIndex: 0
     },
   ]);
   const [activeTabId, setActiveTabId] = useState("1");
-  const [urlInput, setUrlInput] = useState("https://www.google.com");
+  const [urlInput, setUrlInput] = useState("https://www.bing.com");
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const activeTab = tabs.find(t => t.id === activeTabId);
@@ -49,7 +49,7 @@ export const Browser = () => {
     if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
       // If it doesn't look like a URL, search it
       if (!targetUrl.includes('.') || targetUrl.includes(' ')) {
-        targetUrl = `https://www.google.com/search?q=${encodeURIComponent(targetUrl)}`;
+        targetUrl = `https://www.bing.com/search?q=${encodeURIComponent(targetUrl)}`;
       } else {
         targetUrl = 'https://' + targetUrl;
       }
@@ -92,7 +92,7 @@ export const Browser = () => {
   };
 
   const handleHome = () => {
-    handleNavigate("https://www.google.com");
+    handleNavigate("https://www.bing.com");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -105,8 +105,8 @@ export const Browser = () => {
     const newTab: Tab = {
       id: Date.now().toString(),
       title: "New Tab",
-      url: "https://www.google.com",
-      history: ["https://www.google.com"],
+      url: "https://www.bing.com",
+      history: ["https://www.bing.com"],
       historyIndex: 0
     };
     setTabs([...tabs, newTab]);
