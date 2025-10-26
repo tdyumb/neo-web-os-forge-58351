@@ -81,7 +81,7 @@ export const Window = ({ window, isActive, onClose, onMinimize, onMaximize, onFo
   return (
     <div
       ref={windowRef}
-      className={`absolute flex flex-col rounded-lg overflow-hidden transition-all duration-200 backdrop-blur-xl animate-window-open ${
+      className={`absolute flex flex-col rounded-lg overflow-hidden transition-all duration-200 backdrop-blur-xl animate-fade-in ${
         isActive ? 'shadow-[var(--shadow-window)] z-50' : 'shadow-lg z-40'
       }`}
       style={{
