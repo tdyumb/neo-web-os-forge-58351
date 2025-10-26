@@ -1,4 +1,4 @@
-import { Monitor, Palette, Info, HardDrive } from "lucide-react";
+import { Monitor, Palette, Info, HardDrive, Download, Upload } from "lucide-react";
 import { Button } from "../ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Label } from "../ui/label";
@@ -16,6 +16,57 @@ export const Settings = () => {
     { name: "Orange", value: "orange", color: "hsl(25 95% 53%)" },
     { name: "Pink", value: "pink", color: "hsl(330 81% 60%)" },
   ];
+
+  const exportData = () => {
+    const allData = {
+      files: localStorage.getItem("neo-os-files"),
+      windows: localStorage.getItem("neo-os-windows"),
+      theme: localStorage.getItem("neo-theme"),
+      accentColor: localStorage.getItem("neo-accent-color"),
+      exportDate: new Date().toISOString(),
+    };
+
+    const dataStr = JSON.stringify(allData, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `neo-backup-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    toast.success("Data exported successfully!");
+  };
+
+  const importData = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const data = JSON.parse(event.target?.result as string);
+          
+          if (data.files) localStorage.setItem("neo-os-files", data.files);
+          if (data.windows) localStorage.setItem("neo-os-windows", data.windows);
+          if (data.theme) localStorage.setItem("neo-theme", data.theme);
+          if (data.accentColor) localStorage.setItem("neo-accent-color", data.accentColor);
+
+          toast.success("Data imported successfully! Reloading...");
+          setTimeout(() => window.location.reload(), 1000);
+        } catch (error) {
+          toast.error("Failed to import data. Invalid file format.");
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
 
   const clearAllData = () => {
     localStorage.clear();
@@ -99,9 +150,36 @@ export const Settings = () => {
           
           <div className="bg-muted/30 rounded-lg p-6 space-y-4">
             <div className="space-y-2">
-              <Label className="text-base font-medium">Local Storage</Label>
+              <Label className="text-base font-medium">Backup & Restore</Label>
               <p className="text-sm text-muted-foreground">
-                Clear all saved windows, settings, and app data
+                Export or import all your files, windows, and settings
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={exportData}
+                className="flex-1"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export Data
+              </Button>
+              <Button
+                variant="outline"
+                onClick={importData}
+                className="flex-1"
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Import Data
+              </Button>
+            </div>
+
+            <Separator />
+
+            <div className="space-y-2">
+              <Label className="text-base font-medium">Clear All Data</Label>
+              <p className="text-sm text-muted-foreground">
+                Permanently delete all saved windows, settings, and app data
               </p>
             </div>
             <Button
