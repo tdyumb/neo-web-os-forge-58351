@@ -2,26 +2,49 @@ import { useState } from "react";
 import { Folder, File, ChevronRight, Home, Download, Image, Music, Video } from "lucide-react";
 import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
+import { useFileSystem } from "@/contexts/FileSystemContext";
 
 interface FileItem {
+  id?: string;
   name: string;
   type: "folder" | "file";
   size?: string;
   modified?: string;
 }
 
-export const FileExplorer = () => {
+interface FileExplorerProps {
+  onFileOpen?: (fileId: string) => void;
+}
+
+export const FileExplorer = ({ onFileOpen }: FileExplorerProps) => {
+  const { files: savedFiles } = useFileSystem();
   const [currentPath, setCurrentPath] = useState("Home");
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
   
-  const files: FileItem[] = [
+  const folders: FileItem[] = [
     { name: "Documents", type: "folder" },
     { name: "Downloads", type: "folder" },
     { name: "Pictures", type: "folder" },
     { name: "Music", type: "folder" },
     { name: "Videos", type: "folder" },
-    { name: "README.txt", type: "file", size: "1.2 KB", modified: "2024-01-15" },
-    { name: "Welcome.txt", type: "file", size: "856 B", modified: "2024-01-15" },
   ];
+
+  const userFiles: FileItem[] = savedFiles
+    .filter((f) => f.folder === currentPath)
+    .map((f) => ({
+      id: f.id,
+      name: f.name,
+      type: "file" as const,
+      size: formatFileSize(f.size),
+      modified: f.modified,
+    }));
+
+  const files = [...folders, ...userFiles];
 
   return (
     <div className="h-full flex">
@@ -75,8 +98,13 @@ export const FileExplorer = () => {
               <tbody>
                 {files.map((file, index) => (
                   <tr
-                    key={index}
+                    key={file.id || index}
                     className="hover:bg-muted/30 cursor-pointer border-b border-border/10"
+                    onDoubleClick={() => {
+                      if (file.type === "file" && file.id && onFileOpen) {
+                        onFileOpen(file.id);
+                      }
+                    }}
                   >
                     <td className="py-2 flex items-center gap-2">
                       {file.type === "folder" ? (

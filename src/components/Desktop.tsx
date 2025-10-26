@@ -20,23 +20,37 @@ export interface WindowData {
   isMaximized: boolean;
   position: { x: number; y: number };
   size: { width: number; height: number };
+  fileId?: string;
 }
 
 const STORAGE_KEY = "neo-os-windows";
 
-// Desktop apps definition
-const desktopApps = [
-  { name: "Browser", icon: <Globe className="h-8 w-8" />, content: <Browser /> },
-  { name: "File Explorer", icon: <Folder className="h-8 w-8" />, content: <FileExplorer /> },
-  { name: "Text Editor", icon: <FileText className="h-8 w-8" />, content: <TextEditor /> },
-  { name: "Calculator", icon: <Calculator className="h-8 w-8" />, content: <CalculatorApp /> },
-  { name: "Terminal", icon: <Terminal className="h-8 w-8" />, content: <TerminalApp /> },
-  { name: "Settings", icon: <SettingsIcon className="h-8 w-8" />, content: <Settings /> },
-];
-
 export const Desktop = () => {
   const [windows, setWindows] = useState<WindowData[]>([]);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
+
+  const openFileInEditor = (fileId: string) => {
+    const existingEditor = windows.find(w => w.title.startsWith("Text Editor"));
+    if (existingEditor) {
+      setWindows(windows.map(w => 
+        w.id === existingEditor.id 
+          ? { ...w, content: <TextEditor fileId={fileId} />, fileId, isMinimized: false }
+          : w
+      ));
+      setActiveWindowId(existingEditor.id);
+    } else {
+      openApp("Text Editor", <FileText className="h-4 w-4" />, <TextEditor fileId={fileId} />, fileId);
+    }
+  };
+
+  const desktopApps = [
+    { name: "Browser", icon: <Globe className="h-8 w-8" />, content: <Browser /> },
+    { name: "File Explorer", icon: <Folder className="h-8 w-8" />, content: <FileExplorer onFileOpen={openFileInEditor} /> },
+    { name: "Text Editor", icon: <FileText className="h-8 w-8" />, content: <TextEditor /> },
+    { name: "Calculator", icon: <Calculator className="h-8 w-8" />, content: <CalculatorApp /> },
+    { name: "Terminal", icon: <Terminal className="h-8 w-8" />, content: <TerminalApp /> },
+    { name: "Settings", icon: <SettingsIcon className="h-8 w-8" />, content: <Settings /> },
+  ];
 
   // Load windows from localStorage on mount
   useEffect(() => {
@@ -83,8 +97,8 @@ export const Desktop = () => {
     }
   }, [windows]);
 
-  const openApp = (appName: string, icon: React.ReactNode, content: React.ReactNode) => {
-    const existingWindow = windows.find(w => w.title === appName);
+  const openApp = (appName: string, icon: React.ReactNode, content: React.ReactNode, fileId?: string) => {
+    const existingWindow = windows.find(w => w.title === appName && !fileId);
     if (existingWindow) {
       setActiveWindowId(existingWindow.id);
       if (existingWindow.isMinimized) {
@@ -104,6 +118,7 @@ export const Desktop = () => {
       isMaximized: false,
       position: { x: 100 + windows.length * 30, y: 80 + windows.length * 30 },
       size: { width: 800, height: 600 },
+      fileId,
     };
     setWindows([...windows, newWindow]);
     setActiveWindowId(newWindow.id);
