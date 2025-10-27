@@ -122,6 +122,16 @@ export default {
             transform: "translateY(0)"
           }
         },
+        "scale-in": {
+          "0%": {
+            opacity: "0",
+            transform: "scale(0.95)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "scale(1)"
+          }
+        },
         "slide-up": {
           "0%": {
             transform: "translateY(4px)",
@@ -142,6 +152,7 @@ export default {
         "window-minimize": "window-minimize 0.15s cubic-bezier(0.4, 0, 1, 1)",
         "icon-bounce": "icon-bounce 0.3s ease-in-out",
         "fade-in": "fade-in 0.3s ease-out",
+        "scale-in": "scale-in 0.3s ease-out",
         "slide-up": "slide-up 0.2s ease-out",
       },
       backdropBlur: {
