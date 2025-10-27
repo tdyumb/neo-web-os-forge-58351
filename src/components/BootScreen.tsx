@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Hammer } from "lucide-react";
 
 interface BootScreenProps {
   onComplete: () => void;
@@ -23,22 +23,18 @@ export const BootScreen = ({ onComplete }: BootScreenProps) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-[#0078d4] flex flex-col items-center justify-center z-50">
-      {/* Windows logo - 4 squares */}
-      <div className="mb-16">
-        <div className="grid grid-cols-2 gap-3">
-          <div className="w-16 h-16 bg-white/90 rounded-sm" />
-          <div className="w-16 h-16 bg-white/90 rounded-sm" />
-          <div className="w-16 h-16 bg-white/90 rounded-sm" />
-          <div className="w-16 h-16 bg-white/90 rounded-sm" />
-        </div>
+    <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center z-50">
+      {/* Forge logo - Hammer */}
+      <div className="mb-16 relative">
+        <div className="absolute inset-0 bg-orange-500/20 blur-3xl animate-pulse" />
+        <Hammer className="w-32 h-32 text-orange-500 relative animate-float" strokeWidth={1.5} />
       </div>
 
       {/* Loading spinner */}
       <div className="flex flex-col items-center space-y-8">
-        <Loader2 className="h-10 w-10 text-white animate-spin" />
-        <p className="text-white text-lg font-light">
-          Starting up{dots}
+        <Loader2 className="h-10 w-10 text-orange-400 animate-spin" />
+        <p className="text-white/90 text-lg font-light tracking-wide">
+          Forging your workspace{dots}
         </p>
       </div>
     </div>

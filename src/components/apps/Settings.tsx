@@ -93,7 +93,7 @@ export const Settings = () => {
           <div className="bg-muted/30 rounded-lg p-6">
             <div className="flex items-center gap-6">
               {/* Profile Avatar */}
-              <div className="w-24 h-24 rounded-full bg-[#0078d4] flex items-center justify-center text-white text-3xl font-semibold">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white text-3xl font-semibold shadow-lg shadow-orange-500/30">
                 {localStorage.getItem("os-username")?.charAt(0).toUpperCase() || "U"}
               </div>
               
@@ -109,7 +109,7 @@ export const Settings = () => {
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">user@neoOS.local</span>
+                    <span className="text-muted-foreground">user@forge.local</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <Shield className="h-4 w-4 text-muted-foreground" />
@@ -233,13 +233,13 @@ export const Settings = () => {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Info className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold">About NEO</h2>
+            <h2 className="text-xl font-semibold">About Forge</h2>
           </div>
           
           <div className="bg-muted/30 rounded-lg p-6 space-y-2">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Version</span>
-              <span className="font-medium">1.0.0</span>
+              <span className="font-medium">Forge 1.0.0</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Engine</span>
@@ -251,7 +251,7 @@ export const Settings = () => {
             </div>
             <Separator className="my-4" />
             <p className="text-sm text-center text-muted-foreground">
-              © 2024 NEO Operating System
+              © 2024 Forge Operating System
             </p>
           </div>
         </div>
