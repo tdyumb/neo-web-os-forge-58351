@@ -1,62 +1,45 @@
 import { useEffect, useState } from "react";
-import { Monitor, Loader2 } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { Loader2 } from "lucide-react";
 
 interface BootScreenProps {
   onComplete: () => void;
   username?: string;
 }
 
-export const BootScreen = ({ onComplete, username }: BootScreenProps) => {
-  const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState("Initializing...");
+export const BootScreen = ({ onComplete }: BootScreenProps) => {
+  const [dots, setDots] = useState("");
 
   useEffect(() => {
-    const steps = [
-      { progress: 20, status: "Loading system files...", delay: 300 },
-      { progress: 40, status: "Mounting file system...", delay: 300 },
-      { progress: 60, status: "Loading applications...", delay: 400 },
-      { progress: 80, status: "Restoring session...", delay: 300 },
-      { progress: 100, status: "Ready!", delay: 200 },
-    ];
+    const dotsInterval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 500);
 
-    let currentStep = 0;
-    const runStep = () => {
-      if (currentStep < steps.length) {
-        const step = steps[currentStep];
-        setProgress(step.progress);
-        setStatus(step.status);
-        currentStep++;
-        setTimeout(runStep, step.delay);
-      } else {
-        setTimeout(onComplete, 300);
-      }
+    const bootTimer = setTimeout(onComplete, 3000);
+
+    return () => {
+      clearInterval(dotsInterval);
+      clearTimeout(bootTimer);
     };
-
-    setTimeout(runStep, 500);
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-background flex items-center justify-center z-50 animate-fade-in">
-      <div className="max-w-md w-full mx-4 space-y-8">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="p-4 bg-primary/10 rounded-full animate-glow">
-            <Monitor className="h-16 w-16 text-primary" />
-          </div>
-          {username && (
-            <h2 className="text-xl font-semibold text-foreground">
-              Welcome back, {username}
-            </h2>
-          )}
+    <div className="fixed inset-0 bg-[#0078d4] flex flex-col items-center justify-center z-50">
+      {/* Windows logo - 4 squares */}
+      <div className="mb-16">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="w-16 h-16 bg-white/90 rounded-sm" />
+          <div className="w-16 h-16 bg-white/90 rounded-sm" />
+          <div className="w-16 h-16 bg-white/90 rounded-sm" />
+          <div className="w-16 h-16 bg-white/90 rounded-sm" />
         </div>
+      </div>
 
-        <div className="space-y-4">
-          <div className="flex items-center justify-center space-x-2 text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            <span className="text-sm">{status}</span>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
+      {/* Loading spinner */}
+      <div className="flex flex-col items-center space-y-8">
+        <Loader2 className="h-10 w-10 text-white animate-spin" />
+        <p className="text-white text-lg font-light">
+          Starting up{dots}
+        </p>
       </div>
     </div>
   );

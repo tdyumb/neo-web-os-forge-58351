@@ -1,4 +1,4 @@
-import { Monitor, Palette, Info, HardDrive, Download, Upload } from "lucide-react";
+import { Monitor, Palette, Info, HardDrive, Download, Upload, User, Mail, Shield } from "lucide-react";
 import { Button } from "../ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Label } from "../ui/label";
@@ -80,7 +80,45 @@ export const Settings = () => {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">Settings</h1>
-          <p className="text-muted-foreground">Customize your NEO experience</p>
+          <p className="text-muted-foreground">Manage your account and preferences</p>
+        </div>
+
+        {/* User Profile Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <User className="h-5 w-5 text-primary" />
+            <h2 className="text-xl font-semibold">Your profile</h2>
+          </div>
+          
+          <div className="bg-muted/30 rounded-lg p-6">
+            <div className="flex items-center gap-6">
+              {/* Profile Avatar */}
+              <div className="w-24 h-24 rounded-full bg-[#0078d4] flex items-center justify-center text-white text-3xl font-semibold">
+                {localStorage.getItem("os-username")?.charAt(0).toUpperCase() || "U"}
+              </div>
+              
+              {/* Profile Info */}
+              <div className="flex-1 space-y-3">
+                <div>
+                  <h3 className="text-2xl font-semibold">
+                    {localStorage.getItem("os-username") || "User"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">Local account</p>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">user@neoOS.local</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Shield className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Administrator</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Appearance Section */}
